@@ -1,7 +1,7 @@
 #!/bin/bash
 set -beEuo pipefail
 
-. run-misc.sh
+. $(dirname $(readlink -f $0))/run-misc.sh
 
 if [ $# -gt 1 ] ; then version=$1 ; else version=${DEFAULT_VERSION} ; fi
 port="8889"
