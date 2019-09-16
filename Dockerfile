@@ -15,7 +15,7 @@ RUN R -e "install.packages(c('devtools', 'BiocManager', 'googledrive', 'googlesh
 && R -e "BiocManager::install('impute')" \
 && R -e "install.packages(c('PMA'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
-RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('tidyverse/googlesheets4'); devtools::install_github('junyangq/glmnetPlus'); devtools::install_github('junyangq/snpnet')"
+RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('tidyverse/googlesheets4'); devtools::install_github('junyangq/glmnetPlus'); devtools::install_github('junyangq/snpnet'); devtools::install_github('NightingaleHealth/ggforestplot')"
 
 COPY misc/glmnet_2.0-20.tar.gz glmnet_2.0-20.tar.gz
 
