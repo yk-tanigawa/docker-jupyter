@@ -11,7 +11,7 @@ bind_dst="/home/ytanigaw"
 
 docker run -it -w ${bind_dst} --rm -p ${port}:8888 \
 --mount type=bind,src=/cluster/u/$USER,dst=${bind_dst} \
---mount type=bind,src=/afs/cs.stanford.edu/group/evodevo,dst="${bind_dst}-afs" \
+--mount type=bind,src=/cluster,dst=/cluster \
 ${dimg} \
 /opt/jupyter-start.sh
 
