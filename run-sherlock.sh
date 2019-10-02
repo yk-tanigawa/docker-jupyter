@@ -14,5 +14,5 @@ if [ ! -f ${simg} ] ; then
 fi
 
 cd ${HOME}
-singularity run -H /home/jovyan ${simg}
+singularity run -H /home/jovyan ${simg} /opt/jupyter-start.sh
 

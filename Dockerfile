@@ -1,9 +1,17 @@
-# Specify our base image
+#Specify our base image
 FROM jupyter/datascience-notebook:latest
 
 # Copy additional files
-COPY misc/glmnet_2.0-20.tar.gz glmnet_2.0-20.tar.gz
+WORKDIR /opt
 RUN git clone https://github.com/chrchang/plink-ng.git
+COPY misc/glmnet_2.0-20.tar.gz .
+COPY misc/zstd-1.4.3.tar.gz .
+
+# install zstd
+RUN tar -xzvf zstd-1.4.3.tar.gz
+WORKDIR /opt/zstd-1.4.3
+RUN make install PREFIX=/opt/conda
+WORKDIR /opt
 
 # Install packages
 RUN conda update -n base conda 
@@ -19,8 +27,7 @@ RUN pip install bash_kernel \
 && python -m bash_kernel.install
 
 # Add a Python 2 environment
-RUN conda create --yes --name py27 python=2.7 anaconda 
-
+RUN conda create --yes --name py27 python=2.7 anaconda
 RUN ["/bin/bash", "-c", "source activate py27 && cd plink-ng/2.0/Python && python setup.py build_ext && python setup.py install && python -m ipykernel install --user --name py27 --display-name py27 && source deactivate && cd -"]
 
 # Install R packages from CRAN/Bioconductor
@@ -30,17 +37,9 @@ RUN R -e "install.packages(c('devtools', 'BiocManager', 'googledrive', 'googlesh
 
 RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('tidyverse/googlesheets4'); devtools::install_github('junyangq/glmnetPlus'); devtools::install_github('junyangq/snpnet'); devtools::install_github('NightingaleHealth/ggforestplot'); install.packages('glmnet_2.0-20.tar.gz', repos = NULL, type='source'); install.packages('plink-ng/2.0/pgenlibr', repos = NULL, type='source');"
 
-WORKDIR $HOME
-COPY misc/zstd-1.4.3.tar.gz .
-RUN tar -xzvf zstd-1.4.3.tar.gz
-WORKDIR zstd-1.4.3
-RUN make install PREFIX=/opt/conda
+RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config
+RUN cp -ar /home/jovyan/.local/share/jupyter /opt/jupyter-data
 
-WORKDIR ${HOME}/plink-ng 
-RUN R -e "Sys.setenv(TAR = '/bin/tar'); install.packages('/home/jovyan/plink-ng/2.0/pgenlibr', repos = NULL, type='source');"
-
-# Run Jupyter
-#CMD ["start-notebook.sh", "lab", "--NotebookApp.token=''"]
-CMD ["jupyter", "lab", "--NotebookApp.token=''"]
-#CMD ["start-notebook.sh", "--NotebookApp.password=''", ]
+WORKDIR /opt
+COPY jupyter-start.sh .
 
