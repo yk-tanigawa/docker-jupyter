@@ -1,21 +1,24 @@
 #Specify our base image
 FROM jupyter/datascience-notebook:latest
 
-# Copy additional files
-WORKDIR /opt
-RUN git clone https://github.com/chrchang/plink-ng.git
-COPY misc/glmnet_2.0-20.tar.gz .
-COPY misc/zstd-1.4.3.tar.gz .
-
-# install zstd
-RUN tar -xzvf zstd-1.4.3.tar.gz
-WORKDIR /opt/zstd-1.4.3
-RUN make install PREFIX=/opt/conda
-WORKDIR /opt
-
-# Install packages
 RUN conda update -n base conda 
 
+# Copy additional files
+WORKDIR /opt
+COPY misc/glmnet_2.0-20.tar.gz .
+COPY misc/zstd-1.4.3.tar.gz .
+RUN tar -xzvf zstd-1.4.3.tar.gz
+
+# install zstd
+WORKDIR /opt/zstd-1.4.3
+RUN make install PREFIX=/opt/conda
+
+# pull pgenlib/pgenlibr
+WORKDIR /opt
+RUN git clone https://github.com/chrchang/plink-ng.git
+
+# Install packages
+WORKDIR /opt
 RUN conda install -c conda-forge r-latex2exp r-plotly jupyter_contrib_nbextensions \
 && conda install -c r r-gridextra \
 && conda install -c plotly plotly \
@@ -28,7 +31,8 @@ RUN pip install bash_kernel \
 
 # Add a Python 2 environment
 RUN conda create --yes --name py27 python=2.7 anaconda
-RUN ["/bin/bash", "-c", "source activate py27 && cd plink-ng/2.0/Python && python setup.py build_ext && python setup.py install && python -m ipykernel install --user --name py27 --display-name py27 && source deactivate && cd -"]
+#RUN ["/bin/bash", "-c", "source activate py27 && cd plink-ng/2.0/Python && python setup.py build_ext && python setup.py install && python -m ipykernel install --user --name py27 --display-name py27 && conda deactivate && cd -"]
+RUN ["/bin/bash", "-c", "source activate py27 && python -m ipykernel install --user --name py27 --display-name py27 && conda deactivate" ]
 
 # Install R packages from CRAN/Bioconductor
 RUN R -e "install.packages(c('devtools', 'BiocManager', 'googledrive', 'googlesheets', 'ggpointdensity', 'glmnet', 'pcLasso', 'BGData', 'pROC', 'h5', 'snow', 'snowfall'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)" \
@@ -40,6 +44,7 @@ RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('tidyverse/goog
 RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config
 RUN cp -ar /home/jovyan/.local/share/jupyter /opt/jupyter-data
 
+# add launch script
 WORKDIR /opt
 COPY jupyter-start.sh .
 
