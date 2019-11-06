@@ -13,10 +13,6 @@ RUN tar -xzvf zstd-1.4.3.tar.gz
 WORKDIR /opt/zstd-1.4.3
 RUN make install PREFIX=/opt/conda
 
-# pull pgenlib/pgenlibr
-WORKDIR /opt
-RUN git clone https://github.com/chrchang/plink-ng.git
-
 # Install packages
 WORKDIR /opt
 RUN conda install -c conda-forge r-latex2exp r-plotly jupyter_contrib_nbextensions \
@@ -39,7 +35,14 @@ RUN R -e "install.packages(c('devtools', 'BiocManager', 'googledrive', 'googlesh
 && R -e "BiocManager::install('impute')" \
 && R -e "install.packages(c('PMA'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
-RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('tidyverse/googlesheets4'); devtools::install_github('junyangq/glmnetPlus'); devtools::install_github('junyangq/snpnet'); devtools::install_github('NightingaleHealth/ggforestplot'); install.packages('glmnet_2.0-20.tar.gz', repos = NULL, type='source'); install.packages('plink-ng/2.0/pgenlibr', repos = NULL, type='source');"
+# install other packages
+RUN R -e "install.packages(c('ggrepel'), repos='http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('tidyverse/googlesheets4'); devtools::install_github('junyangq/glmnetPlus'); devtools::install_github('junyangq/snpnet'); devtools::install_github('NightingaleHealth/ggforestplot'); install.packages('glmnet_2.0-20.tar.gz', repos = NULL, type='source');"
+
+# pull pgenlib/pgenlibr
+WORKDIR /opt
+RUN git clone https://github.com/chrchang/plink-ng.git
+RUN R -e "Sys.setenv(TAR = '/bin/tar'); install.packages('plink-ng/2.0/pgenlibr', repos = NULL, type='source');"
 
 RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config
 RUN cp -ar /home/jovyan/.local/share/jupyter /opt/jupyter-data
