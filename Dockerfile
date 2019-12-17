@@ -48,7 +48,9 @@ RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('tidyverse/goog
 RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config
 RUN cp -ar /home/jovyan/.local/share/jupyter /opt/jupyter-data
 
+
 RUN R -e "install.packages(c('pheatmap', 'DataExplorer', 'esquisse', 'mlr', 'parsnip', 'ranger'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "install.packages(c('UpSetR'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # add launch script
 WORKDIR /opt
