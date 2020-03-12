@@ -56,3 +56,5 @@ RUN R -e "install.packages(c('UpSetR'), repos = 'http://cran.us.r-project.org', 
 WORKDIR /opt
 COPY jupyter-start.sh .
 
+RUN R -e "install.packages(c('TwoSampleMR', 'MendelianRandomization'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+
