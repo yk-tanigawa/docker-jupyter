@@ -57,4 +57,20 @@ WORKDIR /opt
 COPY jupyter-start.sh .
 
 RUN R -e "install.packages(c('TwoSampleMR', 'MendelianRandomization'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "install.packages(c('forestplot', 'meta'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+
+#USER root
+
+#RUN apt-get install -y software-properties-common
+#RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+#RUN apt-get install -y libudunits2-dev libgdal-dev libgeos-dev libproj-dev
+#RUN apt-get install libudunits2-dev -y
+
+#USER jovyan
+
+RUN R -e "install.packages(c('units'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "install.packages(c('sf'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "install.packages(c('spdep'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "install.packages(c('rstan', 'brms'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "install.packages(c('corrr', 'corrplot'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
