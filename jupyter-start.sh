@@ -9,4 +9,3 @@ export JUPYTER_DATA_DIR="${JUPYTER_PATH}"
 jupyter --paths
 
 jupyter notebook --NotebookApp.token=''
-
