@@ -1,11 +1,25 @@
-# Yosuke's docker image of jupyter
+# Yosuke's docker image of Jupyter notebook environment
 
 To normalize notebook environment, Yosuke creates and maintains Docker image of Jupyter notebook.
 The image is pushed to [Docker Hub](https://hub.docker.com/r/yosuketanigawa/jupyter_yt).
 
 ## How to run the notebook
 
-We have run scripts.
+You should able to run this container with the following command:
+
+```{bash}
+docker_jupyter_tmp=/tmp/docker-jupyter
+bind_dst=/home/$USER
+if [ ! -d ${docker_jupyter_tmp} ] ; then mkdir -p ${docker_jupyter_tmp} ; fi
+docker run -it \
+--user=root -e NB_USER=jovyan -e NB_UID=$(id -u) -e NB_GID=$(id -g) \
+-w ${bind_dst} --rm -p ${port}:8888 \
+--mount type=bind,src=${bind_dst},dst=${bind_dst} \
+--mount type=bind,src=${docker_jupyter_tmp},dst=/jupyter-runtime \
+yosuketanigawa/jupyter_yt:latest
+```
+
+We also have run scripts for yosuke's environment.
 
 - `run-local.sh`
 - `run-sherlock.sh`
@@ -43,4 +57,10 @@ docker push yosuketanigawa/jupyter_yt:20190723
 
 ## Version history
 
+- 2020/4/13: we updated the documentation.
 - 2020/4/4: we removed the dependencies to the private repositories.
+
+## Acknowledgement
+
+[![Wold you buy me some coffee?](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/yosuketanigawa)
+
