@@ -39,7 +39,7 @@ You will also need to update the `run-misc.sh` to update the default version.
 docker pull jupyter/datascience-notebook:latest
 
 # build an image
-docker build -t jupyter_yt:20190723 .
+docker build -t yosuketanigawa/jupyter_yt:20200415 .
   
 # image management
 docker images
