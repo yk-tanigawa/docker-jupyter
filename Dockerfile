@@ -49,7 +49,11 @@ RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink
 
 # additional packages
 # RUN R -e "install.packages(c('ggdendro'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('mkanai/corrplot'))" \
+&&  R -e "install.packages(c('igraph', 'Hmisc'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "install.packages(c('docopt'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # add launch script
 WORKDIR /opt
 COPY jupyter-start.sh .
+
