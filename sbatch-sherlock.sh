@@ -10,6 +10,6 @@
 
 set -beEuo pipefail
 
-sbatch --dependency=afterany:${SLURM_JOBID} sbatch-sherlock.sh
+sbatch -p mrivas --qos=high_p --dependency=afterany:${SLURM_JOBID} sbatch-sherlock.sh
 bash run-sherlock.sh
 
