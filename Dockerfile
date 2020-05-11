@@ -33,8 +33,12 @@ RUN R -e "install.packages(c('devtools', 'BiocManager', 'tidyverse', 'gridextra'
 # RUN ["/bin/bash", "-c", "source activate py27 && python -m ipykernel install --user --name py27 --display-name py27 && conda deactivate" ]
 
 # copy Jupyter-related directories
+USER root
+#RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config \
+#&&  cp -ar /home/jovyan/.local/share/jupyter /opt/jupyter-data
 RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config \
 &&  cp -ar /home/jovyan/.local/share/jupyter /opt/jupyter-data
+USER $NB_UID
 
 # install other packages from GitHub
 ENV R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"
