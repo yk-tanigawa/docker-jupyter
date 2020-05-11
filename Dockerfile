@@ -1,21 +1,17 @@
 #Specify our base image
 FROM jupyter/datascience-notebook:latest
 
-USER root
-RUN apt-get update
-USER $NB_UID
-
-RUN conda update -n base conda 
-
 # Install Ubuntu/Debian packages
 USER root
-RUN apt-get install -y software-properties-common \
+RUN apt-get update \
+&&  apt-get install -y libcurl4-gnutls-dev zlib1g-dev software-properties-common \
 &&  add-apt-repository ppa:ubuntugis/ubuntugis-unstable \
 &&  apt-get install -y libudunits2-dev libgdal-dev libgeos-dev libproj-dev
-USER $NB_UID
 
 # Install packages from conda
+USER $NB_UID
 WORKDIR /opt
+RUN conda update -n base conda
 RUN conda install -c conda-forge r-latex2exp r-plotly jupyter_contrib_nbextensions dask \
 &&  conda install -c plotly plotly \
 &&  jupyter contrib nbextension install --user
@@ -24,12 +20,12 @@ RUN conda install -c conda-forge r-latex2exp r-plotly jupyter_contrib_nbextensio
 RUN pip install bash_kernel \
 &&  python -m bash_kernel.install
 
-# Install R packages from CRAN/Bioconductor
-RUN R -e "install.packages(c('devtools', 'BiocManager', 'tidyverse', 'gridextra', 'ggrepel', 'UpSetR', 'corrr', 'corrplot', 'h5', 'snow', 'snowfall', 'glmnet', 'pcLasso', 'PMA', 'pROC', 'rstan', 'brms', 'TwoSampleMR', 'MendelianRandomization', 'forestplot', 'meta', 'googledrive', 'googlesheets', 'ggpointdensity', 'BGData', 'pheatmap', 'DataExplorer', 'esquisse', 'mlr', 'parsnip', 'ranger', 'VennDiagram', 'ggdendro'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"  \
-&&  R -e "BiocManager::install('impute')"
-
 # Install Python packages
 RUN pip install rpy2 zstandard zstd h5py modin
+
+# Install R packages from CRAN/Bioconductor
+RUN R -e "install.packages(c('devtools', 'BiocManager', 'tidyverse', 'gridextra', 'ggrepel', 'UpSetR', 'corrr', 'corrplot', 'h5', 'snow', 'snowfall', 'glmnet', 'pcLasso', 'PMA', 'pROC', 'rstan', 'brms', 'TwoSampleMR', 'MendelianRandomization', 'forestplot', 'meta', 'googledrive', 'googlesheets', 'ggpointdensity', 'BGData', 'pheatmap', 'DataExplorer', 'esquisse', 'mlr', 'parsnip', 'ranger', 'VennDiagram', 'ggdendro', 'corrplot', 'igraph', 'Hmisc', 'docopt', 'svglite'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"  \
+&&  R -e "BiocManager::install('impute')"
 
 # # Add a Python 2 environment
 # RUN conda create --yes --name py27 python=2.7 anaconda
@@ -48,11 +44,8 @@ RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink
 &&  R -e "Sys.setenv(TAR = '/bin/tar'); remotes::install_github(c('paul-buerkner/brms'))"
 
 # additional packages
-# RUN R -e "install.packages(c('ggdendro'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('mkanai/corrplot'))" \
-&&  R -e "install.packages(c('igraph', 'Hmisc'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "install.packages(c('docopt'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "install.packages(c('svglite'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+# RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('mkanai/corrplot'))" \
+# RUN R -e "install.packages(c('svglite'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # add launch script
 WORKDIR /opt
