@@ -14,7 +14,3 @@ if [ ! -f ${simg} ] ; then
     cd -
 fi
 
-cd ${HOME}
-#singularity run --bind ${LOCAL_SCRATCH}:/jupyter-runtime ${simg} /opt/jupyter-start.sh
-singularity run -H /home/jovyan ${simg} jupyter notebook --NotebookApp.token=''
-

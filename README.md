@@ -25,6 +25,12 @@ We also have run scripts for yosuke's environment.
 - `run-sherlock.sh`
 - `run-bejerano.sh`
 
+For job submission with a custom time limit (due to scheduled system maintenance, etc.):
+
+```{bash}
+sbatch -p mrivas --qos=high_p --output=/scratch/groups/mrivas/users/ytanigaw/simg/logs/jupyter.%A.out --error=/scratch/groups/mrivas/users/ytanigaw/simg/logs/jupyter.%A.err --nodes=1 --cores=6 --mem=64000 --time=5-16:00:00 run-sherlock.sh
+```
+
 ## clean-up old images
 
 `bash docker-image-clean-up.sh`
@@ -57,6 +63,7 @@ docker push yosuketanigawa/jupyter_yt:20190723
 
 ## Version history
 
+- 2020/5/28: add a script to pull the latest image, [`pull-sherlock.sh`](pull-sherlock.sh).
 - 2020/4/13: we updated the documentation.
 - 2020/4/4: we removed the dependencies to the private repositories.
 
