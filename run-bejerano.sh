@@ -16,5 +16,9 @@ docker run -it \
 --user=root -e NB_USER=jovyan -e NB_UID=17737 -e NB_GID=559 \
 -w ${bind_dst} --rm -p ${port}:8888 \
 --mount type=bind,src=/cluster/u/$USER,dst=${bind_dst} \
+--mount type=bind,src=/cluster/data,dst=/cluster/data,readonly \
+--mount type=bind,src=/cluster/gbdb,dst=/cluster/gbdb,readonly \
+--mount type=bind,src=/cluster/gbdb-bej,dst=/cluster/gbdb-bej,readonly \
 --mount type=bind,src=${tmp_dir},dst=/jupyter-runtime \
-${dimg} 
+${dimg}
+
