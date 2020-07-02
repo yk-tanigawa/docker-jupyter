@@ -44,7 +44,7 @@ You will also need to update the `run-misc.sh` to update the default version.
 # pull the latest version of the base image
 docker pull jupyter/datascience-notebook:latest
 
-# build an image
+# build an image # please use --no-cache option when needed
 docker build -t yosuketanigawa/jupyter_yt:20200415 .
   
 # image management
@@ -63,6 +63,7 @@ docker push yosuketanigawa/jupyter_yt:20190723
 
 ## Version history
 
+- 2020/7/1: a refresh of Docker image. This now includes the [latest glmnet (version 4.0.2)](https://www.rdocumentation.org/packages/glmnet/versions/4.0-2 ).
 - 2020/5/28: add a script to pull the latest image, [`pull-sherlock.sh`](pull-sherlock.sh).
 - 2020/4/13: we updated the documentation.
 - 2020/4/4: we removed the dependencies to the private repositories.

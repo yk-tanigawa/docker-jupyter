@@ -24,7 +24,7 @@ RUN pip install bash_kernel \
 RUN pip install rpy2 zstandard zstd h5py modin
 
 # Install R packages from CRAN/Bioconductor
-RUN R -e "install.packages(c('devtools', 'BiocManager', 'tidyverse', 'gridextra', 'ggrepel', 'UpSetR', 'corrr', 'corrplot', 'h5', 'snow', 'snowfall', 'glmnet', 'pcLasso', 'PMA', 'pROC', 'rstan', 'brms', 'TwoSampleMR', 'MendelianRandomization', 'forestplot', 'meta', 'googledrive', 'googlesheets', 'ggpointdensity', 'BGData', 'pheatmap', 'DataExplorer', 'esquisse', 'mlr', 'parsnip', 'ranger', 'VennDiagram', 'ggdendro', 'corrplot', 'igraph', 'Hmisc', 'docopt', 'svglite'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"  \
+RUN R -e "install.packages(c('future', 'future.apply', 'devtools', 'BiocManager', 'tidyverse', 'gridextra', 'ggrepel', 'UpSetR', 'corrr', 'corrplot', 'h5', 'snow', 'snowfall', 'glmnet', 'pcLasso', 'PMA', 'pROC', 'rstan', 'brms', 'TwoSampleMR', 'MendelianRandomization', 'forestplot', 'meta', 'googledrive', 'googlesheets', 'ggpointdensity', 'BGData', 'pheatmap', 'DataExplorer', 'esquisse', 'mlr', 'parsnip', 'ranger', 'VennDiagram', 'ggdendro', 'corrplot', 'igraph', 'Hmisc', 'docopt', 'svglite'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"  \
 &&  R -e "BiocManager::install('impute')"
 
 # # Add a Python 2 environment
@@ -48,7 +48,7 @@ RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink
 &&  R -e "Sys.setenv(TAR = '/bin/tar'); remotes::install_github(c('paul-buerkner/brms'))"
 
 # additional packages
-# RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('mkanai/corrplot'))" \
+RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('mkanai/corrplot'))" \
 # RUN R -e "install.packages(c('svglite'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # add launch script
