@@ -48,7 +48,7 @@ RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink
 &&  R -e "Sys.setenv(TAR = '/bin/tar'); remotes::install_github(c('paul-buerkner/brms'))"
 
 # additional packages
-RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('mkanai/corrplot'))" \
+RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('mkanai/corrplot'))"
 # RUN R -e "install.packages(c('svglite'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # add launch script
