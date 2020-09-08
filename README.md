@@ -46,7 +46,7 @@ docker pull jupyter/datascience-notebook:latest
 
 # build an image # please use --no-cache option when needed
 docker build -t yosuketanigawa/jupyter_yt:20200415 .
-  
+
 # image management
 docker images
 
@@ -55,6 +55,21 @@ docker tag aedb45fa398c yosuketanigawa/jupyter_yt:20190723
 # docker login
 docker login
 docker push yosuketanigawa/jupyter_yt:20190723
+```
+
+## Usage on the Sherlock clulster
+
+
+### pull the latest image
+
+```{bash}
+bash run-simg.sh -v 20200701
+```
+
+### run some commands within the container
+
+```{bash}
+bash run-simg.sh R
 ```
 
 ## Reference
