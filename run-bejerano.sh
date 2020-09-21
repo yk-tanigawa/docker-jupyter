@@ -19,6 +19,6 @@ docker run -it \
 --mount type=bind,src=/cluster/data,dst=/cluster/data,readonly \
 --mount type=bind,src=/cluster/gbdb,dst=/cluster/gbdb,readonly \
 --mount type=bind,src=/cluster/gbdb-bej,dst=/cluster/gbdb-bej,readonly \
---mount type=bind,src=${tmp_dir},dst=/jupyter-runtime \
+--mount type=bind,src=${tmp_dir},dst=/home/jovyan/.local/share/jupyter \
 ${dimg}
 

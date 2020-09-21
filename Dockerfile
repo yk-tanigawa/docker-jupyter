@@ -50,6 +50,8 @@ RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink
 # additional packages
 RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('mkanai/corrplot'))"
 # RUN R -e "install.packages(c('svglite'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "install.packages(c('lobstr'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('r-lib/sloop'))"
 
 # add launch script
 WORKDIR /opt
