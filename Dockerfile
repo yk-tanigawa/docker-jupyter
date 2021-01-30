@@ -13,22 +13,24 @@ RUN apt-get update \
 USER $NB_UID
 ENV R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"
 WORKDIR /opt
-RUN conda update -n base conda \
-&&  conda install -c conda-forge r-latex2exp r-plotly jupyter_contrib_nbextensions dask dash modin h5py zstandard \
-&&  conda install -c plotly plotly \
-&&  jupyter contrib nbextension install --user \
+RUN conda update -n base conda
+RUN conda install -c conda-forge r-latex2exp r-plotly jupyter_contrib_nbextensions dask dash modin h5py zstandard
+RUN conda install -c plotly plotly \
+&& jupyter contrib nbextension install --user \
 # Add the bash kernel
 &&  pip install bash_kernel \
 &&  python -m bash_kernel.install \
 # Install Python packages
-&&  pip install rpy2 zstd \
+&&  pip install rpy2 zstd
+# Install Apache Arrow library
+RUN pip install 'pyarrow>=3.0.0'
 # Install R packages from CRAN/Bioconductor
-&&  R -e "install.packages(c('future', 'future.apply', 'devtools', 'BiocManager', 'tidyverse', 'gridextra', 'ggrepel', 'UpSetR', 'corrr', 'corrplot', 'h5', 'snow', 'snowfall', 'glmnet', 'pcLasso', 'PMA', 'pROC', 'rstan', 'brms', 'TwoSampleMR', 'MendelianRandomization', 'forestplot', 'meta', 'googledrive', 'googlesheets', 'ggpointdensity', 'BGData', 'pheatmap', 'DataExplorer', 'esquisse', 'mlr', 'parsnip', 'ranger', 'VennDiagram', 'ggdendro', 'corrplot', 'igraph', 'Hmisc', 'docopt', 'svglite', 'lobstr'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"  \
-&&  R -e "BiocManager::install('impute')" \
+RUN R -e "install.packages(c('future', 'future.apply', 'devtools', 'BiocManager', 'tidyverse', 'gridextra', 'ggrepel', 'UpSetR', 'corrr', 'corrplot', 'h5', 'snow', 'snowfall', 'glmnet', 'pcLasso', 'PMA', 'pROC', 'rstan', 'brms', 'TwoSampleMR', 'MendelianRandomization', 'forestplot', 'meta', 'googledrive', 'googlesheets', 'ggpointdensity', 'BGData', 'pheatmap', 'DataExplorer', 'esquisse', 'mlr', 'parsnip', 'ranger', 'VennDiagram', 'ggdendro', 'corrplot', 'igraph', 'Hmisc', 'docopt', 'svglite', 'lobstr', 'arrow', 'vroom', 'arrow'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"  \
+&&  R -e "BiocManager::install('impute')"
 # install other packages from GitHub
-&&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink-ng', subdir='2.0/pgenlibr');" \
+RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink-ng', subdir='2.0/pgenlibr');" \
 &&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink-ng', subdir='2.0/cindex');" \
-&&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('tidyverse/googlesheets4', 'NightingaleHealth/ggforestplot', 'junyangq/glmnetPlus', 'rivas-lab/snpnet', 'r-lib/sloop', 'mkanai/corrplot'))" \
+&&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('tidyverse/googlesheets4', 'NightingaleHealth/ggforestplot', 'junyangq/glmnetPlus', 'rivas-lab/snpnet', 'r-lib/sloop'))" \
 &&  R -e "Sys.setenv(TAR = '/bin/tar'); remotes::install_github(c('paul-buerkner/brms'))"
 
 # # Add a Python 2 environment
@@ -37,11 +39,13 @@ RUN conda update -n base conda \
 # RUN ["/bin/bash", "-c", "source activate py27 && python -m ipykernel install --user --name py27 --display-name py27 && conda deactivate" ]
 
 # additional packages
-# RUN conda install -c conda-forge r-arrow
-RUN R -e "install.packages(c('arrow'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "install.packages(c('vroom'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN conda install -c conda-forge pyarrow
-RUN R -e "arrow::install_arrow()"
+# RUN conda install -c conda-forge pyarrow
+# RUN R -e "arrow::install_arrow()"
+# RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('mkanai/corrplot'))"
+
+# additional packages from git submodules
+ADD _submodules/cud4 /opt/cud4
+RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
 
 # copy Jupyter-related directories
 USER root
@@ -52,4 +56,3 @@ RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config \
 USER $NB_UID
 WORKDIR /opt
 COPY jupyter-start.sh .
-
