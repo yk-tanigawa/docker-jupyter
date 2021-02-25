@@ -47,10 +47,19 @@ RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink
 ADD _submodules/cud4 /opt/cud4
 RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
 
+# install Git and GitHub integration for Jupyter
+# https://github.com/jupyterlab/jupyterlab-git
+# https://github.com/jupyterlab/jupyterlab-github
+# RUN conda install -c conda-forge jupyterlab-git
+RUN pip install jupyterlab-git
+
 # copy Jupyter-related directories
 USER root
 RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config \
 &&  cp -ar /home/jovyan/.local/share/jupyter /opt/jupyter-data
+
+USER $NB_UID
+RUN jupyter labextension install @jupyterlab/github
 
 # add launch script
 USER $NB_UID
