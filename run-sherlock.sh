@@ -15,6 +15,6 @@ if [ ! -f ${simg} ] ; then
 fi
 
 cd ${HOME}
-#singularity run --bind ${LOCAL_SCRATCH}:/jupyter-runtime ${simg} /opt/jupyter-start.sh
-singularity run -H /home/jovyan ${simg} jupyter notebook --NotebookApp.token=''
+#singularity -s exec --bind ${LOCAL_SCRATCH}:/jupyter-runtime ${simg} /opt/jupyter-start.sh
+singularity -s exec -H /home/jovyan ${simg} jupyter notebook --NotebookApp.token=''
 
