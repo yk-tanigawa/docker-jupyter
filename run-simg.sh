@@ -99,4 +99,4 @@ if [ ! -s ${simg} ] ; then
     cd -
 fi
 
-singularity run -H /home/jovyan ${simg} ${params[@]}
+singularity -s exec -H /home/jovyan ${simg} ${params[@]}
