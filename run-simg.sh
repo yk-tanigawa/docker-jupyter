@@ -43,7 +43,7 @@ EOF
 ############################################################
 # tmp dir
 ############################################################
-tmp_dir_root="$LOCAL_SCRATCH"
+tmp_dir_root="${LOCAL_SCRATCH:=/tmp}"
 if [ ! -d ${tmp_dir_root} ] ; then mkdir -p $tmp_dir_root ; fi
 tmp_dir="$(mktemp -p ${tmp_dir_root} -d tmp-$(basename $0)-$(date +%Y%m%d-%H%M%S)-XXXXXXXXXX)"
 # echo "tmp_dir = $tmp_dir" >&2
