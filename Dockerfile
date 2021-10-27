@@ -25,12 +25,12 @@ RUN conda install -c plotly plotly \
 # Install Apache Arrow library
 RUN pip install 'pyarrow>=3.0.0'
 # Install R packages from CRAN/Bioconductor
-RUN R -e "install.packages(c('future', 'future.apply', 'devtools', 'BiocManager', 'tidyverse', 'gridextra', 'ggrepel', 'UpSetR', 'corrr', 'corrplot', 'h5', 'snow', 'snowfall', 'glmnet', 'pcLasso', 'PMA', 'pROC', 'rstan', 'brms', 'TwoSampleMR', 'MendelianRandomization', 'forestplot', 'meta', 'googledrive', 'googlesheets', 'ggpointdensity', 'BGData', 'pheatmap', 'DataExplorer', 'esquisse', 'mlr', 'parsnip', 'ranger', 'VennDiagram', 'ggdendro', 'corrplot', 'igraph', 'Hmisc', 'docopt', 'svglite', 'lobstr', 'arrow', 'vroom', 'arrow'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"  \
+RUN R -e "install.packages(c('future', 'future.apply', 'devtools', 'BiocManager', 'tidyverse', 'gridextra', 'ggrepel', 'UpSetR', 'corrr', 'corrplot', 'h5', 'snow', 'snowfall', 'glmnet', 'pcLasso', 'PMA', 'pROC', 'rstan', 'brms', 'TwoSampleMR', 'MendelianRandomization', 'forestplot', 'meta', 'googledrive', 'googlesheets', 'ggpointdensity', 'BGData', 'pheatmap', 'DataExplorer', 'esquisse', 'mlr', 'parsnip', 'ranger', 'VennDiagram', 'ggdendro', 'corrplot', 'igraph', 'Hmisc', 'docopt', 'svglite', 'lobstr', 'arrow', 'vroom', 'AICcmodavg', 'doMC', 'gridGeometry','sf','magick'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"  \
 &&  R -e "BiocManager::install('impute')"
 # install other packages from GitHub
 RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink-ng', subdir='2.0/pgenlibr');" \
 &&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink-ng', subdir='2.0/cindex');" \
-&&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('tidyverse/googlesheets4', 'NightingaleHealth/ggforestplot', 'junyangq/glmnetPlus', 'rivas-lab/snpnet', 'r-lib/sloop'))" \
+&&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('tidyverse/googlesheets4', 'NightingaleHealth/ggforestplot', 'junyangq/glmnetPlus', 'rivas-lab/snpnet', 'r-lib/sloop', 'coolbutuseless/ggpattern'))" \
 &&  R -e "Sys.setenv(TAR = '/bin/tar'); remotes::install_github(c('paul-buerkner/brms'))"
 
 # # Add a Python 2 environment
@@ -53,6 +53,10 @@ RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
 # RUN conda install -c conda-forge jupyterlab-git
 RUN pip install jupyterlab-git
 
+# additional package
+RUN R -e "install.packages(c('arrow', 'DescTools'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+# RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('coolbutuseless/ggpattern'))"
+
 # copy Jupyter-related directories
 USER root
 RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config \
@@ -65,3 +69,4 @@ RUN jupyter labextension install @jupyterlab/github
 USER $NB_UID
 WORKDIR /opt
 COPY jupyter-start.sh .
+
