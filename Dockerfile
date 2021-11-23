@@ -56,6 +56,7 @@ RUN pip install jupyterlab-git
 # additional package
 RUN R -e "install.packages(c('arrow', 'DescTools'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 # RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('coolbutuseless/ggpattern'))"
+RUN R -e "install.packages(c('nlshrink'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # copy Jupyter-related directories
 USER root
