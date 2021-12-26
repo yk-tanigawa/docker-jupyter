@@ -59,6 +59,9 @@ RUN R -e "install.packages(c('arrow', 'DescTools'), repos = 'http://cran.us.r-pr
 RUN R -e "install.packages(c('nlshrink'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 RUN R -e "install.packages(c('argparse', 'testit', 'testthat', 'usethis'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
+RUN R -e "BiocManager::install('ComplexHeatmap')"
+RUN R -e "BiocManager::install('InteractiveComplexHeatmap')"
+
 # copy Jupyter-related directories
 USER root
 RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config \
