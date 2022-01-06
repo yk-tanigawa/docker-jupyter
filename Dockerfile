@@ -62,6 +62,8 @@ RUN R -e "install.packages(c('argparse', 'testit', 'testthat', 'usethis'), repos
 RUN R -e "BiocManager::install('ComplexHeatmap')"
 RUN R -e "BiocManager::install('InteractiveComplexHeatmap')"
 
+RUN R -e "install.packages(c('gprofiler2', 'enrichR'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+
 # copy Jupyter-related directories
 USER root
 RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config \
