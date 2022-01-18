@@ -1,5 +1,5 @@
 #!/bin/bash
 set -beEuo pipefail
 
-[[ ${DEFAULT_VERSION:-} -eq 1 ]] && return || readonly DEFAULT_VERSION="20220104"
+[[ ${DEFAULT_VERSION:-} -eq 1 ]] && return || readonly DEFAULT_VERSION="20220117"
 
