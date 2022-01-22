@@ -7,44 +7,45 @@ RUN apt-get update \
 # install software-properties-common first so that we can call add-apt-repository
 &&  apt-get install -y software-properties-common \
 &&  add-apt-repository ppa:ubuntugis/ubuntugis-unstable \
-&&  apt-get install -y libcurl4-gnutls-dev zlib1g-dev libudunits2-dev libgdal-dev libgeos-dev libproj-dev
+&&  apt-get install -y libcurl4-gnutls-dev zlib1g-dev libudunits2-dev libgdal-dev libgeos-dev libproj-dev libcairo2-dev
 
-# Install packages from conda
-USER $NB_UID
 ENV R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"
+
+# conda
+USER $NB_UID
 WORKDIR /opt
 RUN conda install mamba -n base -c conda-forge \
-&&  conda update -n base conda \
-&&  mamba install -c conda-forge r-latex2exp r-plotly jupyter_contrib_nbextensions dask dash modin h5py zstandard \
-&& mamba install -c plotly plotly \
-&& jupyter contrib nbextension install --user \
-# Add the bash kernel
-&&  pip install bash_kernel \
-&&  python -m bash_kernel.install \
-# Install Python packages
-&&  pip install rpy2 zstd jupyterlab-git
-# Install Apache Arrow library
-RUN pip install 'pyarrow>=3.0.0'
+&&  mamba update -n base conda
+RUN mamba install -c conda-forge r-latex2exp r-plotly jupyter_contrib_nbextensions dask dash modin h5py zstandard pyarrow \
+&& mamba install -c plotly plotly
 
-RUN jupyter labextension install @jupyterlab/github
+# bash kernel
+RUN pip install bash_kernel \
+&&  python -m bash_kernel.install
 
-# Install R packages from CRAN/Bioconductor
-RUN R -e "install.packages(c('future', 'future.apply', 'devtools', 'BiocManager', 'tidyverse', 'gridextra', 'ggrepel', 'UpSetR', 'corrr', 'corrplot', 'h5', 'snow', 'snowfall', 'glmnet', 'pcLasso', 'PMA', 'pROC', 'rstan', 'brms', 'TwoSampleMR', 'MendelianRandomization', 'forestplot', 'meta', 'googledrive', 'googlesheets', 'ggpointdensity', 'BGData', 'pheatmap', 'DataExplorer', 'esquisse', 'mlr', 'parsnip', 'ranger', 'VennDiagram', 'ggdendro', 'corrplot', 'igraph', 'Hmisc', 'docopt', 'svglite', 'lobstr', 'arrow', 'vroom', 'AICcmodavg', 'doMC', 'gridGeometry','sf','magick', 'arrow', 'DescTools', 'nlshrink', 'argparse', 'testit', 'testthat', 'usethis', 'gprofiler2', 'enrichR'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "BiocManager::install(c('impute'))"
-RUN R -e "BiocManager::install(c('scPCA'))"
-RUN R -e "BiocManager::install(c('ComplexHeatmap'))"
-RUN R -e "BiocManager::install(c('InteractiveComplexHeatmap'))"
+# Jupyter extensions
+RUN jupyter contrib nbextension install --user \
+&&  jupyter labextension install @jupyterlab/github
 
+# Python via pip
+ADD /requirements/Python.pip.txt /opt/requirements/Python.pip.txt
+RUN pip install -r /opt/requirements/Python.pip.txt
+
+# R via CRAN
+ADD /requirements/R.CRAN.txt /opt/requirements/R.CRAN.txt
+RUN R -e "install.packages(c('BiocManager', 'devtools'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)" \
+&&  R -e "install.packages(read.table('/opt/requirements/R.CRAN.txt', header = FALSE)$V1, repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+
+# R via Bioconductor
+ADD /requirements/R.Bioc.txt /opt/requirements/R.Bioc.txt
+RUN R -e "BiocManager::install(read.table('/opt/requirements/R.Bioc.txt', header = FALSE)$V1)"
+
+# R vis GitHub
 # install other packages from GitHub
+ADD /requirements/R.GitHub.txt /opt/requirements/R.GitHub.txt
 RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink-ng', subdir='2.0/pgenlibr');" \
 &&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink-ng', subdir='2.0/cindex');" \
-&&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('tidyverse/googlesheets4', 'NightingaleHealth/ggforestplot', 'junyangq/glmnetPlus', 'rivas-lab/snpnet', 'r-lib/sloop', 'coolbutuseless/ggpattern'))" \
-&&  R -e "Sys.setenv(TAR = '/bin/tar'); remotes::install_github(c('paul-buerkner/brms'))"
-
-USER root
-RUN apt-get install -y libcairo2-dev
-#RUN R -e "BiocManager::install(c('ComplexHeatmap'))"
-RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('jokergoo/ComplexHeatmap'))"
+&&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(read.table('/opt/requirements/R.GitHub.txt', header = FALSE)$V1)"
 
 USER $NB_UID
 # additional packages from git submodules
@@ -52,7 +53,7 @@ ADD _submodules/cud4 /opt/cud4
 RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
 
 # additional package
-# RUN R -e "install.packages(c('arrow', 'DescTools'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+# RUN R -e "install.packages(c('arrow'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 # RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('coolbutuseless/ggpattern'))"
 # RUN R -e "BiocManager::install('scPCA')"
 

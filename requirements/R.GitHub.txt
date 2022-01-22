@@ -1,0 +1,13 @@
+NightingaleHealth/ggforestplot
+coolbutuseless/ggpattern
+jokergoo/ComplexHeatmap
+jokergoo/EnrichedHeatmap
+jokergoo/GeneSummary
+jokergoo/InteractiveComplexHeatmap
+jokergoo/circlize
+jokergoo/rGREAT
+jokergoo/simplifyEnrichment
+junyangq/glmnetPlus
+r-lib/sloop
+rivas-lab/snpnet
+tidyverse/googlesheets4
