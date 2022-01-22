@@ -30,7 +30,10 @@ RUN jupyter labextension install @jupyterlab/github
 
 # Install R packages from CRAN/Bioconductor
 RUN R -e "install.packages(c('future', 'future.apply', 'devtools', 'BiocManager', 'tidyverse', 'gridextra', 'ggrepel', 'UpSetR', 'corrr', 'corrplot', 'h5', 'snow', 'snowfall', 'glmnet', 'pcLasso', 'PMA', 'pROC', 'rstan', 'brms', 'TwoSampleMR', 'MendelianRandomization', 'forestplot', 'meta', 'googledrive', 'googlesheets', 'ggpointdensity', 'BGData', 'pheatmap', 'DataExplorer', 'esquisse', 'mlr', 'parsnip', 'ranger', 'VennDiagram', 'ggdendro', 'corrplot', 'igraph', 'Hmisc', 'docopt', 'svglite', 'lobstr', 'arrow', 'vroom', 'AICcmodavg', 'doMC', 'gridGeometry','sf','magick', 'arrow', 'DescTools', 'nlshrink', 'argparse', 'testit', 'testthat', 'usethis', 'gprofiler2', 'enrichR'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "BiocManager::install(c('impute', 'ComplexHeatmap', 'InteractiveComplexHeatmap', 'scPCA'))"
+RUN R -e "BiocManager::install(c('impute'))"
+RUN R -e "BiocManager::install(c('scPCA'))"
+RUN R -e "BiocManager::install(c('ComplexHeatmap'))"
+RUN R -e "BiocManager::install(c('InteractiveComplexHeatmap'))"
 
 # install other packages from GitHub
 RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink-ng', subdir='2.0/pgenlibr');" \
@@ -38,6 +41,12 @@ RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink
 &&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('tidyverse/googlesheets4', 'NightingaleHealth/ggforestplot', 'junyangq/glmnetPlus', 'rivas-lab/snpnet', 'r-lib/sloop', 'coolbutuseless/ggpattern'))" \
 &&  R -e "Sys.setenv(TAR = '/bin/tar'); remotes::install_github(c('paul-buerkner/brms'))"
 
+USER root
+RUN apt-get install -y libcairo2-dev
+#RUN R -e "BiocManager::install(c('ComplexHeatmap'))"
+RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('jokergoo/ComplexHeatmap'))"
+
+USER $NB_UID
 # additional packages from git submodules
 ADD _submodules/cud4 /opt/cud4
 RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
