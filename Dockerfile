@@ -17,7 +17,7 @@ WORKDIR /opt
 RUN conda install mamba -n base -c conda-forge \
 &&  mamba update -n base conda
 RUN mamba install -c conda-forge r-latex2exp r-plotly jupyter_contrib_nbextensions dask dash modin h5py zstandard pyarrow \
-&& mamba install -c plotly plotly
+&&  mamba install -c plotly plotly
 
 # bash kernel
 RUN pip install bash_kernel \
@@ -34,18 +34,18 @@ RUN pip install -r /opt/requirements/Python.pip.txt
 # R via CRAN
 ADD /requirements/R.CRAN.txt /opt/requirements/R.CRAN.txt
 RUN R -e "install.packages(c('BiocManager', 'devtools'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)" \
-&&  R -e "install.packages(read.table('/opt/requirements/R.CRAN.txt', header = FALSE)$V1, repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+&&  R -e "for(CRAN_pkg in read.table('/opt/requirements/R.CRAN.txt', header = FALSE)$V1){ install.packages(CRAN_pkg, repos = 'http://cran.us.r-project.org', dependencies=TRUE) }"
 
 # R via Bioconductor
 ADD /requirements/R.Bioc.txt /opt/requirements/R.Bioc.txt
-RUN R -e "BiocManager::install(read.table('/opt/requirements/R.Bioc.txt', header = FALSE)$V1)"
+RUN R -e "for(bioc_pkg in read.table('/opt/requirements/R.Bioc.txt', header = FALSE)$V1){ BiocManager::install(bioc_pkg) }"
 
 # R vis GitHub
 # install other packages from GitHub
 ADD /requirements/R.GitHub.txt /opt/requirements/R.GitHub.txt
 RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink-ng', subdir='2.0/pgenlibr');" \
 &&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink-ng', subdir='2.0/cindex');" \
-&&  R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(read.table('/opt/requirements/R.GitHub.txt', header = FALSE)$V1)"
+&&  R -e "Sys.setenv(TAR = '/bin/tar'); for(gh_pkg in read.table('/opt/requirements/R.GitHub.txt', header = FALSE)$V1){ devtools::install_github(gh_pkg) }"
 
 USER $NB_UID
 # additional packages from git submodules
