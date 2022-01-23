@@ -1,13 +1,13 @@
 #!/bin/bash
 set -beEuo pipefail
 
-SRCNAME=$(readlink -f $0)
-SRCDIR=$(dirname ${SRCNAME})
+SRCNAME=$(readlink -f "${0}")
+SRCDIR=$(dirname "${SRCNAME}")
 PROGNAME=$(basename $SRCNAME)
-VERSION="0.0.1"
+VERSION="0.1.0"
 NUM_POS_ARGS="1"
 
-source "${SRCDIR}/run-misc.sh"
+source $(dirname "${SRCDIR}")/run-misc.sh
 version=${DEFAULT_VERSION}
 
 ############################################################
@@ -90,12 +90,12 @@ fi
 
 ############################################################
 if [ ${simg} == "__AUTO__" ] ; then
-    simg="/scratch/groups/mrivas/users/ytanigaw/simg/jupyter_yt_${version}.sif"
+    simg="${simg_d_sherlock}/jupyter_yt_${version}.sif"
 fi
 
 if [ ! -s ${simg} ] ; then
     cd $(dirname ${simg})
-    singularity pull docker://yosuketanigawa/jupyter_yt:${version}
+    singularity pull docker://${docker_hub_image_name}:${version}
     cd -
 fi
 

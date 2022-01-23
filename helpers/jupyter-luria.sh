@@ -1,18 +1,20 @@
 #!/bin/bash
 set -beEuo pipefail
 
+SRCNAME=$(readlink -f "${0}")
+SRCDIR=$(dirname "${SRCNAME}")
+
 ml load singularity
 
-#. $(dirname $(readlink -f $0))/run-misc.sh
-. run-misc.sh
+source $(dirname "${SRCDIR}")/run-misc.sh
 
 if [ $# -gt 1 ] ; then version=$1 ; else version=${DEFAULT_VERSION} ; fi
 
-simg="/net/bmc-lab5/data/kellis/users/tanigawa/software/jupyter_yt/jupyter_yt_${version}.sif"
+simg="${simg_d_luria}/jupyter_yt_${version}.sif"
 
 if [ ! -f ${simg} ] ; then
     cd $(dirname ${simg})
-    singularity pull docker://yosuketanigawa/jupyter_yt:${version}
+    singularity pull "docker://${docker_hub_image_name}:${version}"
     cd -
 fi
 
@@ -23,4 +25,3 @@ singularity -s exec \
 --bind /net/bmc-lab5/data/kellis2:/net/bmc-lab5/data/kellis2 \
 -H /home/jovyan \
 ${simg} jupyter notebook --NotebookApp.token=''
-

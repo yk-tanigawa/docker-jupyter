@@ -1,13 +1,13 @@
 #!/bin/bash
 set -beEuo pipefail
 
-SRCNAME=$(readlink -f $0)
-SRCDIR=$(dirname ${SRCNAME})
+SRCNAME=$(readlink -f "${0}")
+SRCDIR=$(dirname "${SRCNAME}")
 PROGNAME=$(basename $SRCNAME)
-VERSION="0.0.1"
+VERSION="0.1.0"
 NUM_POS_ARGS="1"
 
-source "${SRCDIR}/run-misc.sh"
+source $(dirname "${SRCDIR}")/run-misc.sh
 version=${DEFAULT_VERSION}
 
 ############################################################
@@ -90,14 +90,14 @@ fi
 
 ############################################################
 if [ ${simg} == "__AUTO__" ] ; then
-    simg="/net/bmc-lab5/data/kellis/users/tanigawa/software/jupyter_yt/jupyter_yt_${version}.sif"
+    simg="${simg_d_luria}/jupyter_yt_${version}.sif"
 fi
 
 ml load singularity
 
 if [ ! -s ${simg} ] ; then
     cd $(dirname ${simg})
-    singularity pull docker://yosuketanigawa/jupyter_yt:${version}
+    singularity pull docker://${docker_hub_image_name}:${version}
     cd -
 fi
 
@@ -106,4 +106,3 @@ singularity -s exec \
 --bind /net/bmc-lab5/data/kellis2:/net/bmc-lab5/data/kellis2 \
 -H /home/jovyan \
 ${simg} ${params[@]}
-

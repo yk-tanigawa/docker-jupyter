@@ -1,12 +1,15 @@
 #!/bin/bash
 set -beEuo pipefail
 
-. $(dirname $(readlink -f $0))/run-misc.sh
+SRCNAME=$(readlink -f "${0}")
+SRCDIR=$(dirname "${SRCNAME}")
+
+source $(dirname "${SRCDIR}")/run-misc.sh
 
 if [ $# -gt 1 ] ; then version=$1 ; else version=${DEFAULT_VERSION} ; fi
 port="8888"
 
-dimg="yosuketanigawa/jupyter_yt:${version}"
+dimg="${docker_hub_image_name}:${version}"
 bind_dst="/cluster/u/$USER"
 tmp_dir=/tmp/docker-jupyter
 if [ ! -d $tmp_dir ] ; then mkdir -p $tmp_dir ; fi
@@ -21,4 +24,3 @@ docker run -it \
 --mount type=bind,src=/cluster/gbdb-bej,dst=/cluster/gbdb-bej,readonly \
 --mount type=bind,src=${tmp_dir},dst=/home/jovyan/.local/share/jupyter \
 ${dimg}
-

@@ -1,9 +1,26 @@
 # Yosuke's docker image of Jupyter notebook environment
 
-To normalize notebook environment, Yosuke creates and maintains Docker image of Jupyter notebook.
-The image is pushed to [Docker Hub](https://hub.docker.com/r/yosuketanigawa/jupyter_yt).
+To normalize computing environment across different computing resources, Yosuke uses Docker image of Jupyter notebook. This repository contains [Docker file](Dockerfile) and helper scripts. The image is pushed to [Docker Hub](https://hub.docker.com/r/yosuketanigawa/jupyter_yt). In some computing environment, we use Singularity to run the container image.
 
-## How to run the notebook
+## How to run some commands within the container?
+
+We have a wrapper for `singularity -s exec`. Assuming that you some have symlink to one of the `helpers/run-simg-*.sh` script, you can call the script like this.
+
+```{bash}
+bash run-simg.sh R
+```
+
+## How to pull the latest image?
+
+You can specify the version number with `-v` option in the same wrapper script.
+
+```{bash}
+bash run-simg.sh -v 20200701
+```
+
+## How to run the notebook?
+
+We have helper scripts for Yosuke's environments. Please see [`helpers`](helpers) directory.
 
 You should able to run this container with the following command:
 
@@ -19,71 +36,32 @@ docker run -it \
 yosuketanigawa/jupyter_yt:latest
 ```
 
-We also have run scripts for yosuke's environment.
-
-- `run-local.sh`
-- `run-sherlock.sh`
-- `run-bejerano.sh`
-
 For job submission with a custom time limit (due to scheduled system maintenance, etc.):
 
 ```{bash}
 sbatch -p mrivas --qos=high_p --output=/scratch/groups/mrivas/users/ytanigaw/simg/logs/jupyter.%A.out --error=/scratch/groups/mrivas/users/ytanigaw/simg/logs/jupyter.%A.err --nodes=1 --cores=6 --mem=64000 --time=5-16:00:00 run-sherlock.sh
 ```
 
-## clean-up old images
+## Yosuke's usage
 
-`bash docker-image-clean-up.sh`
+We have wrapper scripts written for different computing environment. We place the following symlinks:
 
-## How to build a new version
+- run-simg.sh
+- jupyter.sh
+- logs
 
-We now have a wrapper script. `$ bash docker.update.push.sh 20200404` etc.
-You will also need to update the `run-misc.sh` to update the default version.
-
-```{bash}
-# pull the latest version of the base image
-docker pull jupyter/datascience-notebook:latest
-
-# build an image # please use --no-cache option when needed
-docker build -t yosuketanigawa/jupyter_yt:20200415 .
-
-# image management
-docker images
-
-docker tag aedb45fa398c yosuketanigawa/jupyter_yt:20190723
-
-# docker login
-docker login
-docker push yosuketanigawa/jupyter_yt:20190723
-```
-
-## Usage on the Sherlock clulster
-
-
-### pull the latest image
-
-```{bash}
-bash run-simg.sh -v 20200701
-```
-
-### run some commands within the container
-
-```{bash}
-bash run-simg.sh R
-```
-
-## Reference
+## References
 
 - [Docker file for the base image](https://github.com/jupyter/docker-stacks/blob/master/base-notebook/Dockerfile)
 
 ## Version history
 
-- 2020/7/1: a refresh of Docker image. This now includes the [latest glmnet (version 4.0.2)](https://www.rdocumentation.org/packages/glmnet/versions/4.0-2 ).
+- 2022/1/23: Update Docker image. We now have [`requirements`](requirements) folder that list the R and Python packages.
+- 2020/7/1: Update Docker image. This now includes the [latest glmnet (version 4.0.2)](https://www.rdocumentation.org/packages/glmnet/versions/4.0-2 ).
 - 2020/5/28: add a script to pull the latest image, [`pull-sherlock.sh`](pull-sherlock.sh).
 - 2020/4/13: we updated the documentation.
 - 2020/4/4: we removed the dependencies to the private repositories.
 
-## Acknowledgement
+## Acknowledgements
 
 [![Wold you buy me some coffee?](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/yosuketanigawa)
-

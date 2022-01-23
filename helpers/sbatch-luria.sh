@@ -12,5 +12,4 @@ set -beEuo pipefail
 
 sbatch --dependency=afterany:${SLURM_JOBID} sbatch-luria.sh
 
-bash run-luria.sh
-
+bash jupyter-luria.sh

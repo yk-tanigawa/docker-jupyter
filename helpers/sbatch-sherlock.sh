@@ -11,5 +11,5 @@
 set -beEuo pipefail
 
 sbatch -p mrivas --qos=high_p --dependency=afterany:${SLURM_JOBID} sbatch-sherlock.sh
-bash run-sherlock.sh
 
+bash jupyter-sherlock.sh
