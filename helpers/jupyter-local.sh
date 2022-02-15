@@ -15,6 +15,7 @@ bind_dst="/home/ytanigaw"
 
 docker run -it -w ${bind_dst} --rm -p ${port}:8888 \
 --mount type=bind,src=/Users/$USER,dst=${bind_dst} \
+--mount type=bind,src=/Users/$USER,dst=/Users/$USER \
 --mount type=bind,src=${tmp_dir},dst=/jupyter-runtime \
 ${dimg} \
 /opt/jupyter-start.sh
