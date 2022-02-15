@@ -52,6 +52,11 @@ USER $NB_UID
 ADD _submodules/cud4 /opt/cud4
 RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
 
+USER root
+RUN apt-get install -y libmariadb-dev
+RUN R -e "install.packages(c('RMariaDB'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+
+USER $NB_UID
 # additional package
 # RUN R -e "install.packages(c('arrow'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 # RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('coolbutuseless/ggpattern'))"
