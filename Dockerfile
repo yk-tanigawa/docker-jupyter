@@ -1,5 +1,8 @@
 #Specify our base image
-FROM jupyter/datascience-notebook:latest
+FROM jupyter/datascience-notebook:2022-03-09
+# https://hub.docker.com/r/jupyter/datascience-notebook/tags
+# FROM jupyter/datascience-notebook:latest
+
 
 # Install Ubuntu/Debian packages
 USER root
@@ -7,7 +10,7 @@ RUN apt-get update \
 # install software-properties-common first so that we can call add-apt-repository
 &&  apt-get install -y software-properties-common \
 &&  add-apt-repository ppa:ubuntugis/ubuntugis-unstable \
-&&  apt-get install -y libcurl4-gnutls-dev zlib1g-dev libudunits2-dev libgdal-dev libgeos-dev libproj-dev libcairo2-dev
+&&  apt-get install -y libcurl4-gnutls-dev zlib1g-dev libudunits2-dev libgdal-dev libgeos-dev libproj-dev libcairo2-dev libmariadb-dev
 
 ENV R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"
 
@@ -52,11 +55,6 @@ USER $NB_UID
 ADD _submodules/cud4 /opt/cud4
 RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
 
-USER root
-RUN apt-get install -y libmariadb-dev
-RUN R -e "install.packages(c('RMariaDB'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-
-USER $NB_UID
 # additional package
 # RUN R -e "install.packages(c('arrow'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 # RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('coolbutuseless/ggpattern'))"

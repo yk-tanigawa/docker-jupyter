@@ -33,7 +33,7 @@ googlesheets
 gprofiler2
 gridGeometry
 gridextra
-h5
+hdf5r
 igraph
 lobstr
 magick
