@@ -10,7 +10,9 @@ RUN apt-get update \
 # install software-properties-common first so that we can call add-apt-repository
 &&  apt-get install -y software-properties-common \
 &&  add-apt-repository ppa:ubuntugis/ubuntugis-unstable \
-&&  apt-get install -y libcurl4-gnutls-dev zlib1g-dev libudunits2-dev libgdal-dev libgeos-dev libproj-dev libcairo2-dev libmariadb-dev
+&&  apt-get install -y libcurl4-gnutls-dev zlib1g-dev libudunits2-dev libgdal-dev libgeos-dev libproj-dev libcairo2-dev libhdf5-dev \
+&&  apt-get install -y libmariadb-dev
+
 
 ENV R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"
 
@@ -36,8 +38,8 @@ RUN pip install -r /opt/requirements/Python.pip.txt
 
 # R via CRAN
 ADD /requirements/R.CRAN.txt /opt/requirements/R.CRAN.txt
-RUN R -e "install.packages(c('BiocManager', 'devtools'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)" \
-&&  R -e "for(CRAN_pkg in read.table('/opt/requirements/R.CRAN.txt', header = FALSE)$V1){ install.packages(CRAN_pkg, repos = 'http://cran.us.r-project.org', dependencies=TRUE) }"
+RUN R -e "install.packages(c('BiocManager', 'devtools'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "for(CRAN_pkg in read.table('/opt/requirements/R.CRAN.txt', header = FALSE)$V1){ install.packages(CRAN_pkg, repos = 'http://cran.us.r-project.org', dependencies=TRUE) }"
 
 # R via Bioconductor
 ADD /requirements/R.Bioc.txt /opt/requirements/R.Bioc.txt
