@@ -7,6 +7,7 @@
 #SBATCH --mem=64000
 #SBATCH --time=28-00:00:00
 #SBATCH -p kellis
+#SBATCH --exclude=b2
 
 set -beEuo pipefail
 
