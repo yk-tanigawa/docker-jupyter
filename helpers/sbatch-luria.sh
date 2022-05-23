@@ -3,11 +3,10 @@
 #SBATCH --output=/net/bmc-lab5/data/kellis/users/tanigawa/.logs/jupyter_yt/jupyter.%A.out
 #SBATCH  --error=/net/bmc-lab5/data/kellis/users/tanigawa/.logs/jupyter_yt/jupyter.%A.err
 #SBATCH --nodes=1
-#SBATCH --cores=6
+#SBATCH --ntasks=6
 #SBATCH --mem=64000
 #SBATCH --time=28-00:00:00
 #SBATCH -p kellis
-#SBATCH --exclude=b2
 
 set -beEuo pipefail
 
