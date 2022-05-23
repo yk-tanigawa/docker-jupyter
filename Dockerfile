@@ -61,6 +61,7 @@ RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
 # RUN R -e "install.packages(c('arrow'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 # RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('coolbutuseless/ggpattern'))"
 # RUN R -e "BiocManager::install('scPCA')"
+RUN R -e "install.packages(c('dynamicTreeCut'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 RUN R -e "BiocManager::install('rhdf5')"
 RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('carbocation/aberrant'))"
 
