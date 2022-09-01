@@ -1,10 +1,10 @@
 # Yosuke's docker image of Jupyter notebook environment
 
-To normalize computing environment across different computing resources, Yosuke uses Docker image of Jupyter notebook. This repository contains [Docker file](Dockerfile) and helper scripts. The image is pushed to [Docker Hub](https://hub.docker.com/r/yosuketanigawa/jupyter_yt). In some computing environment, we use Singularity to run the container image.
+To normalize the computing environment across different computing resources, Yosuke uses a Docker image of Jupyter. This repository contains a [Docker file](Dockerfile) and helper scripts. The image is pushed to [Docker Hub](https://hub.docker.com/r/yosuketanigawa/jupyter_yt). In some computing environment, we use Singularity to run the container image.
 
 ## How to run some commands within the container?
 
-We have a wrapper for `singularity -s exec`. Assuming that you some have symlink to one of the `helpers/run-simg-*.sh` script, you can call the script like this.
+We have a wrapper for `singularity -s exec`. Assuming that you have a symlink to one of the `helpers/run-simg-*.sh` scripts, you can call the script like this.
 
 ```{bash}
 bash run-simg.sh R
@@ -12,7 +12,7 @@ bash run-simg.sh R
 
 ## How to pull the latest image?
 
-You can specify the version number with `-v` option in the same wrapper script.
+You can specify the version number with the `-v` option in the same wrapper script.
 
 ```{bash}
 bash run-simg.sh -v 20200701
@@ -20,9 +20,9 @@ bash run-simg.sh -v 20200701
 
 ## How to run the notebook?
 
-We have helper scripts for Yosuke's environments. Please see [`helpers`](helpers) directory.
+We have helper scripts for Yosuke's environments. Please see the [`helpers`](helpers) directory.
 
-You should able to run this container with the following command:
+You should be able to run this container with the following command:
 
 ```{bash}
 docker_jupyter_tmp=/tmp/docker-jupyter
@@ -44,7 +44,7 @@ sbatch -p mrivas --qos=high_p --output=/scratch/groups/mrivas/users/ytanigaw/sim
 
 ## Yosuke's usage
 
-We have wrapper scripts written for different computing environment. We place the following symlinks:
+We have wrapper scripts written for different computing environments. We place the following symlinks:
 
 - run-simg.sh
 - jupyter.sh
@@ -56,7 +56,7 @@ We have wrapper scripts written for different computing environment. We place th
 
 ## Version history
 
-- 2022/1/23: Update Docker image. We now have [`requirements`](requirements) folder that list the R and Python packages.
+- 2022/1/23: Update Docker image. We now have the [`requirements`](requirements) folder that lists the R and Python packages.
 - 2020/7/1: Update Docker image. This now includes the [latest glmnet (version 4.0.2)](https://www.rdocumentation.org/packages/glmnet/versions/4.0-2 ).
 - 2020/5/28: add a script to pull the latest image, [`pull-sherlock.sh`](pull-sherlock.sh).
 - 2020/4/13: we updated the documentation.
