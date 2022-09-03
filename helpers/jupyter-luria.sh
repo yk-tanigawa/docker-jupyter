@@ -24,4 +24,4 @@ singularity -s exec \
 --bind /net/bmc-lab5/data/kellis:/net/bmc-lab5/data/kellis \
 --bind /net/bmc-lab5/data/kellis2:/net/bmc-lab5/data/kellis2 \
 -H /home/jovyan \
-${simg} jupyter notebook --NotebookApp.token=''
+${simg} jupyter notebook --NotebookApp.token='' --port 18181
