@@ -50,6 +50,19 @@ We have wrapper scripts written for different computing environments. We place t
 - jupyter.sh
 - logs
 
+### Adding packages and testing the containers
+
+```{bash}
+bash helpers/build-dev-local.sh
+bash helpers/jupyter-local.sh dev
+```
+
+### pushing it to Docker hub
+
+```{bash}
+bash helpers/push2hub-local.sh 20220902
+```
+
 ## References
 
 - [Docker file for the base image](https://github.com/jupyter/docker-stacks/blob/master/base-notebook/Dockerfile)

@@ -69,6 +69,8 @@ RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('carbocation/
 RUN R -e "BiocManager::install('WGCNA')"
 RUN R -e "install.packages(c('dendextend'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 RUN R -e "install.packages(c('dendsort'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "install.packages(c('vegan'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "install.packages(c('Rtsne', 'tsne', 'umap'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 
 # copy Jupyter-related directories
