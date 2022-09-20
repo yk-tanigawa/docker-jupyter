@@ -71,7 +71,7 @@ RUN R -e "install.packages(c('dendextend'), repos = 'http://cran.us.r-project.or
 RUN R -e "install.packages(c('dendsort'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 RUN R -e "install.packages(c('vegan'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 RUN R -e "install.packages(c('Rtsne', 'tsne', 'umap'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-
+RUN R -e "install.packages(c('NMF'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # copy Jupyter-related directories
 USER root
