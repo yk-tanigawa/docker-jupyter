@@ -93,7 +93,7 @@ if [ ${simg} == "__AUTO__" ] ; then
     simg="${simg_d_luria}/jupyter_yt_${version}.sif"
 fi
 
-ml load singularity
+ml load singularity/3.5.0
 
 if [ ! -s ${simg} ] ; then
     cd $(dirname ${simg})
@@ -103,6 +103,6 @@ fi
 
 singularity -s exec \
 --bind /net/bmc-lab5/data/kellis:/net/bmc-lab5/data/kellis \
---bind /net/bmc-lab5/data/kellis2:/net/bmc-lab5/data/kellis2 \
 -H /home/jovyan \
 ${simg} ${params[@]}
+

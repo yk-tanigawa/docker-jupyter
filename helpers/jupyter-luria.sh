@@ -4,7 +4,7 @@ set -beEuo pipefail
 SRCNAME=$(readlink -f "${0}")
 SRCDIR=$(dirname "${SRCNAME}")
 
-ml load singularity
+ml load singularity/3.5.0
 
 source $(dirname "${SRCDIR}")/run-misc.sh
 
@@ -22,6 +22,6 @@ cd ${HOME}
 #singularity -s exec --bind ${LOCAL_SCRATCH}:/jupyter-runtime ${simg} /opt/jupyter-start.sh
 singularity -s exec \
 --bind /net/bmc-lab5/data/kellis:/net/bmc-lab5/data/kellis \
---bind /net/bmc-lab5/data/kellis2:/net/bmc-lab5/data/kellis2 \
 -H /home/jovyan \
 ${simg} jupyter notebook --NotebookApp.token='' --port 18181
+
