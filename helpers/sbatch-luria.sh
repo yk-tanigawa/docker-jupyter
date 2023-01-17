@@ -11,6 +11,8 @@
 
 set -beEuo pipefail
 
+find /net/bmc-lab5/data/kellis/users/tanigawa/slurm-logs/repos/yk-tanigawa/docker-jupyter/helpers/ -mtime +90 -type f -name "sbatch-luria.*" -exec 'rm {}' \;
+
 sbatch --dependency=afterany:${SLURM_JOBID} sbatch-luria.sh
 
 bash jupyter-luria.sh
