@@ -74,6 +74,7 @@ RUN R -e "install.packages(c('Rtsne', 'tsne', 'umap'), repos = 'http://cran.us.r
 RUN R -e "install.packages(c('NMF'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 RUN R -e "install.packages(c('mstknnclust'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 RUN mamba install -c conda-forge jupyterthemes
+RUN R -e "install.packages(c('glmnetUtils'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # copy Jupyter-related directories
 USER root
