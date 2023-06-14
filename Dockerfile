@@ -75,7 +75,11 @@ RUN R -e "install.packages(c('NMF'), repos = 'http://cran.us.r-project.org', dep
 RUN R -e "install.packages(c('mstknnclust'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 RUN mamba install -c conda-forge jupyterthemes
 RUN R -e "install.packages(c('glmnetUtils'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R --no-echo --no-restore --no-save  -e "install.packages(c('ggrastr'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+
+RUN mamba install -c conda-forge r-ggrastr
+# RUN R --no-echo --no-restore --no-save  -e "install.packages(c('ggrastr'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+
+RUN R -e "install.packages(c('akima'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # copy Jupyter-related directories
 USER root
