@@ -1,7 +1,9 @@
 #Specify our base image
-FROM jupyter/datascience-notebook:2022-03-09
+FROM jupyter/datascience-notebook:notebook-6.4.12
 # https://hub.docker.com/r/jupyter/datascience-notebook/tags
 # FROM jupyter/datascience-notebook:latest
+# It is perhaps better not to use the latest version to simplify
+# the dependency resolution process
 
 
 # Install Ubuntu/Debian packages
@@ -11,6 +13,7 @@ RUN apt-get update \
 &&  apt-get install -y software-properties-common \
 &&  add-apt-repository ppa:ubuntugis/ubuntugis-unstable \
 &&  apt-get install -y libcurl4-gnutls-dev zlib1g-dev libudunits2-dev libgdal-dev libgeos-dev libproj-dev libcairo2-dev libhdf5-dev \
+# Maria DB
 &&  apt-get install -y libmariadb-dev
 
 
@@ -21,14 +24,22 @@ USER $NB_UID
 WORKDIR /opt
 RUN conda install mamba -n base -c conda-forge \
 &&  mamba update -n base conda
-RUN mamba install -c conda-forge r-latex2exp r-plotly jupyter_contrib_nbextensions dask dash modin h5py zstandard pyarrow \
+RUN mamba install -c conda-forge \
+    r-latex2exp r-plotly r-ggrastr \
+    jupyterthemes \
+    dash h5py zstandard pyarrow \
 &&  mamba install -c plotly plotly
+
+# modin and dask
+RUN mamba install -c conda-forge dask
+RUN pip install "modin[dask]"
 
 # bash kernel
 RUN pip install bash_kernel \
 &&  python -m bash_kernel.install
 
 # Jupyter extensions
+RUN pip install jupyter_contrib_nbextensions
 RUN jupyter contrib nbextension install --user \
 &&  jupyter labextension install @jupyterlab/github
 
@@ -39,11 +50,11 @@ RUN pip install -r /opt/requirements/Python.pip.txt
 # R via CRAN
 ADD /requirements/R.CRAN.txt /opt/requirements/R.CRAN.txt
 RUN R -e "install.packages(c('BiocManager', 'devtools'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "for(CRAN_pkg in read.table('/opt/requirements/R.CRAN.txt', header = FALSE)$V1){ install.packages(CRAN_pkg, repos = 'http://cran.us.r-project.org', dependencies=TRUE) }"
+RUN R -e "install.packages(read.table('/opt/requirements/R.CRAN.txt', header = FALSE)$V1, repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # R via Bioconductor
 ADD /requirements/R.Bioc.txt /opt/requirements/R.Bioc.txt
-RUN R -e "for(bioc_pkg in read.table('/opt/requirements/R.Bioc.txt', header = FALSE)$V1){ BiocManager::install(bioc_pkg) }"
+RUN R -e "for(bioc_pkg in read.table('/opt/requirements/R.Bioc.txt', header = FALSE)$V1){ message(bioc_pkg) ; BiocManager::install(bioc_pkg) }"
 
 # R vis GitHub
 # install other packages from GitHub
@@ -61,25 +72,6 @@ RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
 # RUN R -e "install.packages(c('arrow'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 # RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('coolbutuseless/ggpattern'))"
 # RUN R -e "BiocManager::install('scPCA')"
-RUN R -e "install.packages(c('dynamicTreeCut'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "BiocManager::install('rhdf5')"
-RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('carbocation/aberrant'))"
-# RUN R -e "install.packages(c('WGCNA'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-
-RUN R -e "BiocManager::install('WGCNA')"
-RUN R -e "install.packages(c('dendextend'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "install.packages(c('dendsort'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "install.packages(c('vegan'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "install.packages(c('Rtsne', 'tsne', 'umap'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "install.packages(c('NMF'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "install.packages(c('mstknnclust'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN mamba install -c conda-forge jupyterthemes
-RUN R -e "install.packages(c('glmnetUtils'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-
-RUN mamba install -c conda-forge r-ggrastr
-# RUN R --no-echo --no-restore --no-save  -e "install.packages(c('ggrastr'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-
-RUN R -e "install.packages(c('akima'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # copy Jupyter-related directories
 USER root
