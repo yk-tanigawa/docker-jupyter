@@ -50,7 +50,7 @@ RUN pip install -r /opt/requirements/Python.pip.txt
 # R via CRAN
 ADD /requirements/R.CRAN.txt /opt/requirements/R.CRAN.txt
 RUN R -e "install.packages(c('BiocManager', 'devtools'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "install.packages(read.table('/opt/requirements/R.CRAN.txt', header = FALSE)$V1, repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "for(CRAN_pkg in read.table('/opt/requirements/R.CRAN.txt', header = FALSE)$V1){ message(CRAN_pkg) ; install.packages(CRAN_pkg, repos = 'http://cran.us.r-project.org', dependencies=TRUE) }"
 
 # R via Bioconductor
 ADD /requirements/R.Bioc.txt /opt/requirements/R.Bioc.txt

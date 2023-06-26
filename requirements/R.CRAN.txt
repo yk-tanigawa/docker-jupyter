@@ -39,7 +39,7 @@ googledrive
 googlesheets
 gprofiler2
 gridGeometry
-gridextra
+gridExtra
 hdf5r
 igraph
 lobstr
