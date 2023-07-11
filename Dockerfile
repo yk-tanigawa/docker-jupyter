@@ -73,6 +73,9 @@ RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
 # RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('coolbutuseless/ggpattern'))"
 # RUN R -e "BiocManager::install('scPCA')"
 
+RUN R -e "install.packages(c('SeuratObject'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+RUN R -e "BiocManager::install('scater')"
+
 # copy Jupyter-related directories
 USER root
 RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config \
