@@ -1,4 +1,17 @@
+DESeq2
+IHW
+MAST
 WGCNA
+airway
+edgeR
 impute
+pasilla
 rhdf5
+scater
 scPCA
+scran
+tximeta
+tximport
+tximportData
+vsn
+zinbwave
