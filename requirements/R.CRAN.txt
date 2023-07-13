@@ -10,6 +10,7 @@ NMF
 PMA
 RMariaDB
 Rtsne
+SeuratObject
 TwoSampleMR
 UpSetR
 VennDiagram

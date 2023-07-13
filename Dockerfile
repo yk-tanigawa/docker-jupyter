@@ -57,6 +57,7 @@ ADD /requirements/R.Bioc.txt /opt/requirements/R.Bioc.txt
 RUN R -e "for(bioc_pkg in read.table('/opt/requirements/R.Bioc.txt', header = FALSE)$V1){ message(bioc_pkg) ; BiocManager::install(bioc_pkg) }"
 
 # R vis GitHub
+USER root
 # install other packages from GitHub
 ADD /requirements/R.GitHub.txt /opt/requirements/R.GitHub.txt
 RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github('chrchang/plink-ng', subdir='2.0/pgenlibr');" \
@@ -73,8 +74,7 @@ RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
 # RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('coolbutuseless/ggpattern'))"
 # RUN R -e "BiocManager::install('scPCA')"
 
-RUN R -e "install.packages(c('SeuratObject'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
-RUN R -e "BiocManager::install('scater')"
+RUN R -e "install.packages(c('ggvoronoi'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
 
 # copy Jupyter-related directories
 USER root
