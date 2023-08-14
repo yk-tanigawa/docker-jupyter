@@ -103,6 +103,8 @@ fi
 
 if [ ! -d "/tmp/${USER}" ] ; then mkdir -p "/tmp/${USER}" ; fi
 
+cd $(readlink -f $(pwd))
+
 singularity -s exec \
 --bind /net/bmc-lab5/data/kellis:/net/bmc-lab5/data/kellis \
 --bind /net/bmc-lab6/data/lab/kellis:/net/bmc-lab6/data/lab/kellis \

@@ -20,6 +20,8 @@ fi
 
 if [ ! -d "/tmp/${USER}" ] ; then mkdir -p "/tmp/${USER}" ; fi
 
+cd $(readlink -f $(pwd))
+
 cd ${HOME}
 #singularity -s exec --bind ${LOCAL_SCRATCH}:/jupyter-runtime ${simg} /opt/jupyter-start.sh
 singularity -s exec \
