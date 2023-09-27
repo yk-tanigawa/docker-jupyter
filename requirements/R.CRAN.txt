@@ -20,6 +20,7 @@ arrow
 brms
 corrplot
 corrr
+deming
 dendextend
 dendsort
 devtools
@@ -34,6 +35,7 @@ future.apply
 ggdendro
 ggpointdensity
 ggrepel
+ggvoronoi
 glmnet
 glmnetUtils
 googledrive
@@ -45,6 +47,7 @@ hdf5r
 igraph
 lobstr
 magick
+mcr
 meta
 mlr
 mstknnclust
@@ -53,6 +56,7 @@ pROC
 parsnip
 pcLasso
 policytree
+r2redux
 ranger
 rstan
 sf
