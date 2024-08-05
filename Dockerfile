@@ -74,6 +74,8 @@ RUN R -e "install.packages('/opt/cud4', repos = NULL, type='source')"
 # RUN R -e "Sys.setenv(TAR = '/bin/tar'); devtools::install_github(c('coolbutuseless/ggpattern'))"
 RUN R -e "BiocManager::install('clusterProfiler')"
 
+RUN R -e "install.packages(c('R2ROC'), repos = 'http://cran.us.r-project.org', dependencies=TRUE)"
+
 # copy Jupyter-related directories
 USER root
 RUN cp -ar /home/jovyan/.jupyter             /opt/jupyter-config \
